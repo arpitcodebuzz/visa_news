@@ -1,0 +1,47 @@
+{
+  "name": "rolebase-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "start:dev": "nodemon --exec babel-node src/app.js",
+    "build": "rm -rf dist && npx babel src -d dist && cp -R src/views dist",
+    "format": "npx prettier src -w",
+    "build:src": "babel src -d dist",
+    "start": "babel-node src/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.10.0",
+    "body-parser": "^2.2.0",
+    "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "groq-sdk": "^0.30.0",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "knex-paginate": "^3.2.0",
+    "moment": "^2.30.1",
+    "mysql2": "^3.14.1",
+    "openai": "^5.8.3",
+    "puppeteer": "^24.15.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.0",
+    "@babel/core": "^7.28.0",
+    "@babel/node": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "nodemon": "^3.1.10"
+  }
+}

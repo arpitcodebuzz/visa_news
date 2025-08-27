@@ -1,0 +1,165 @@
+openapi: '3.0.2'
+info:
+  title: demoRole
+  version: '1.0'
+servers:
+  - url: http://localhost:9010
+
+components:
+  securitySchemes:
+    bearerAuth:
+      description: '#### Example: Bearer [TOKEN]'
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    unprocessableEntityResponse:
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Invalid email or password combination
+
+paths:
+
+   
+  #  /visadata/visa-groq:
+  #     get:
+  #       summary: Get visa information
+  #       description: Returns detailed visa requirements based on origin and destination countries.
+  #       tags:
+  #         - Visagroq
+  #       parameters:
+  #         - in: query
+  #           name: from
+  #           required: true
+  #           schema:
+  #             type: string
+  #           description: Country you're traveling from (passport country India)
+  #         - in: query
+  #           name: to
+  #           required: false
+  #           schema:
+  #             type: string
+  #           description: Country you want to travel to (Canada)
+  #         - in: query
+  #           name: purpose
+  #           required: false
+  #           schema:
+  #             type: string
+  #             enum: [tourism, study, work, digital_nomad, business, transit, medical, family_visit, conference, diplomatic, religious, volunteer, immigration, training, internship, cultural_exchange, journalism, sports, film]
+  #           description: Purpose of your travel (default: tourism)
+  #       responses:
+  #         200:
+  #           description: Visa information fetched successfully
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   from:
+  #                     type: string
+  #                     example: India
+  #                   to:
+  #                     type: string
+  #                     example: Canada
+  #                   visa:
+  #                     type: string
+  #                     example: "1. Visa Type: Visitor Visa...\n2. Documents Required: ..."
+  #         400:
+  #           description: Missing required query parameters
+  #         500:
+  #           description: Server error while fetching visa data
+
+
+  #  /jobbank/scrape:
+  #     get:
+  #       summary: Scrape job listings from Job Bank Canada
+  #       description: Returns job listings by keyword and location (defaults to keyword=job and location=Toronto, ON).
+  #       tags:
+  #         - JobBank
+  #       parameters:
+  #         - in: query
+  #           name: keyword
+  #           schema:
+  #             type: string
+  #           required: false
+  #           description: Keyword to search for (e.g. developer, mechanic)
+  #           example: developer
+  #         - in: query
+  #           name: location
+  #           schema:
+  #             type: string
+  #           required: false
+  #           description: City, province or territory (e.g. Toronto, ON)
+  #           example: Toronto, ON
+  #       responses:
+  #         200:
+  #           description: Successful response with job listings
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   jobs:
+  #                     type: array
+  #                     items:
+  #                       type: object
+  #                       properties:
+  #                         title:
+  #                           type: string
+  #                           example: Software Developer
+  #                         employer:
+  #                           type: string
+  #                           example: ABC Technologies Inc.
+  #                         location:
+  #                           type: string
+  #                           example: Toronto, ON
+  #                         salary:
+  #                           type: string
+  #                           example: $45.00 hourly
+  #                         datePosted:
+  #                           type: string
+  #                           example: July 30, 2025
+  #                         jobLink:
+  #                           type: string
+  #                           example: https://www.jobbank.gc.ca/jobsearch/jobposting/12345678
+
+
+
+
+   /newsData/newsData:
+      get:
+        summary: Get visa news information
+        description: Returns detailed visa news based on origin and destination countries.
+        tags:
+          - newsData
+        responses:
+          200:
+            description: Visa information fetched successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: true
+                    country:
+                      type: string
+                      example: India
+          400:
+            description: Missing required query parameters
+          500:
+            description: Server error while fetching visa data
+
