@@ -22,7 +22,7 @@ app.use('/documentation', AdminSwagger)
 // app.use('/user-api',userRoutes)
 
 
-app.use('/admin-api/visadata', visaDataRoutes)
+app.use('/admin-api/visadata', visaDataRoutes) 
 app.use('/admin-api/jobbank', jobRoutes)
 app.use('/admin-api/newsData', newsData)
 
