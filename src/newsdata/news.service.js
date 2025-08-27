@@ -9,6 +9,7 @@ class NewsService {
   async newsData() {
     try {
       const todayDate = moment().format("DD MMMM YYYY");
+      // console.log(todayDate)
       
 const prompt = `
 You are a visa and immigration news generator.  
