@@ -35,7 +35,7 @@ The JSON must follow exactly this structure:
     {
       "country_name": "string",
       "headline": "string",
-      "date": "DD MMMM YYYY",
+      "date": "${todayDate}",
       "time_uploaded": "HH:mm:ss",
       "content": [
         "Paragraph 1...",
