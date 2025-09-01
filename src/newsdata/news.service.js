@@ -10,7 +10,6 @@ class NewsService {
     try {
       const todayDate = moment().format("DD MMMM YYYY");
       // console.log(todayDate)
-      const currentTime = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
       
 
       const prompt = `
@@ -81,7 +80,7 @@ Rules:
       // ✅ Clean markdown if present
       rawText = rawText.trim().replace(/```json|```/g, "");
 
-      // ✅ Extract JSON block only (in case model adds intro text)
+      // ✅ Extract JSON block only (in case model adds intro text) 
       const match = rawText.match(/\{[\s\S]*\}/);
       if (!match) {
         throw new Error("No JSON object found in response");
