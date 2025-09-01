@@ -11,6 +11,7 @@ class NewsService {
       const todayDate = moment().format("DD MMMM YYYY");
       // console.log(todayDate)
       const currentTime = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      
 
       const prompt = `
 You are a visa and immigration news generator.  
@@ -30,7 +31,7 @@ The JSON must follow exactly this structure:
 
 {
   "country": "All",
-  "date_generated": "${todayDate}",
+  "date_generated": "${todayDate}", 
   "news": [
     {
       "country_name": "string",
