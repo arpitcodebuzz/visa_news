@@ -10,8 +10,9 @@ class NewsService {
     try {
       const todayDate = moment().format("DD MMMM YYYY");
       // console.log(todayDate)
-      
-const prompt = `
+      const currentTime = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+      const prompt = `
 You are a visa and immigration news generator.  
 Fetch and generate the **latest visa and immigration news** only from the following sources:  
 
@@ -34,7 +35,8 @@ The JSON must follow exactly this structure:
     {
       "country_name": "string",
       "headline": "string",
-      "date": "${todayDate}",
+      "date": "DD MMMM YYYY",
+      "time_uploaded": "HH:mm:ss",
       "content": [
         "Paragraph 1...",
         "Paragraph 2...",
@@ -50,12 +52,14 @@ The JSON must follow exactly this structure:
 
 Rules:
 - Always include at least 10–15 different countries in "news".
+- Each article must include its original **upload/publish time** as "time_uploaded".
 - Each article must have **2000–2500 words** across "content".
 - "content" must always be an array of multiple paragraphs (not a single long string).
 - "source_links" must always be an array (at least one real or placeholder link).
 - Never include any text outside the JSON object.
 - Prioritize pulling news only from the above official visa/immigration sources.
 `;
+
 
 
 
@@ -88,13 +92,17 @@ Rules:
       } catch (jsonError) {
         console.error("❌ JSON parse error:", jsonError.message, "\nRAW:", rawText);
         return {
-          country,
+          country: "All",
           news: [],
           rawResponse: rawText,
         };
       }
 
-      return parsed;
+      // ✅ Format JSON nicely before returning
+      return {
+        ...parsed
+      };
+
     } catch (error) {
       console.error("❌ Error in newsData:", error.message);
       return {
