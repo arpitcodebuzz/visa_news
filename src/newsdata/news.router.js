@@ -6,4 +6,13 @@ import newsController from '../newsdata/news.controller'
 routes.get('/newsData',newsController.newsData)
 
 
+routes.get('/gnews',newsController.gnews)
+
+
+routes.get('/latest', newsController.getLatestNews);
+
+routes.get('/uscis-news', newsController.getUSCISNews);
+
+
+
 export default routes;

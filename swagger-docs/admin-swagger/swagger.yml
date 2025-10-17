@@ -27,56 +27,56 @@ components:
 paths:
 
    
-  #  /visadata/visa-groq:
-  #     get:
-  #       summary: Get visa information
-  #       description: Returns detailed visa requirements based on origin and destination countries.
-  #       tags:
-  #         - Visagroq
-  #       parameters:
-  #         - in: query
-  #           name: from
-  #           required: true
-  #           schema:
-  #             type: string
-  #           description: Country you're traveling from (passport country India)
-  #         - in: query
-  #           name: to
-  #           required: false
-  #           schema:
-  #             type: string
-  #           description: Country you want to travel to (Canada)
-  #         - in: query
-  #           name: purpose
-  #           required: false
-  #           schema:
-  #             type: string
-  #             enum: [tourism, study, work, digital_nomad, business, transit, medical, family_visit, conference, diplomatic, religious, volunteer, immigration, training, internship, cultural_exchange, journalism, sports, film]
-  #           description: Purpose of your travel (default: tourism)
-  #       responses:
-  #         200:
-  #           description: Visa information fetched successfully
-  #           content:
-  #             application/json:
-  #               schema:
-  #                 type: object
-  #                 properties:
-  #                   status:
-  #                     type: boolean
-  #                     example: true
-  #                   from:
-  #                     type: string
-  #                     example: India
-  #                   to:
-  #                     type: string
-  #                     example: Canada
-  #                   visa:
-  #                     type: string
-  #                     example: "1. Visa Type: Visitor Visa...\n2. Documents Required: ..."
-  #         400:
-  #           description: Missing required query parameters
-  #         500:
-  #           description: Server error while fetching visa data
+   /visadata/visa-groq:
+      get:
+        summary: Get visa information
+        description: Returns detailed visa requirements based on origin and destination countries.
+        tags:
+          - Visagroq
+        parameters:
+          - in: query
+            name: from
+            required: true
+            schema:
+              type: string
+            description: Country you're traveling from (passport country India)
+          - in: query
+            name: to
+            required: false
+            schema:
+              type: string
+            description: Country you want to travel to (Canada)
+          - in: query
+            name: purpose
+            required: false
+            schema:
+              type: string
+              enum: [tourism, study, work, digital_nomad, business, transit, medical, family_visit, conference, diplomatic, religious, volunteer, immigration, training, internship, cultural_exchange, journalism, sports, film]
+            description: Purpose of your travel (default: tourism)
+        responses:
+          200:
+            description: Visa information fetched successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: true
+                    from:
+                      type: string
+                      example: India
+                    to:
+                      type: string
+                      example: Canada
+                    visa:
+                      type: string
+                      example: "1. Visa Type: Visitor Visa...\n2. Documents Required: ..."
+          400:
+            description: Missing required query parameters
+          500:
+            description: Server error while fetching visa data
 
 
   #  /jobbank/scrape:
@@ -162,4 +162,210 @@ paths:
             description: Missing required query parameters
           500:
             description: Server error while fetching visa data
+ 
+   /newsData/gnews:
+      get:
+        summary: Get visa-related news
+        description: |
+          Fetch the latest visa and immigration news articles.
+          - Use the `query` parameter for combined search.
+          - Example: `canada study visa`, `australia work visa`, `uk family visa`.
+        parameters:
+          - in: query
+            name: query
+            required: true
+            schema:
+              type: string
+            description: Combined country and visa type query
+            example: canada immigration news
+        responses:
+          "200":
+            description: A list of visa-related news articles
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: true
+                    articles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            example: Canada rejects 62% of student visas in 2025, the toughest stance in a decade
+                          description:
+                            type: string
+                            example: Canada’s student visa rejection rate has hit a decade high...
+                          url:
+                            type: string
+                            format: uri
+                            example: https://timesofindia.indiatimes.com/education/news/canada-rejects-62-of-student-visas/articleshow/123687928.cms
+                          image:
+                            type: string
+                            format: uri
+                            example: https://static.toiimg.com/thumb/msid-123688000,width-1070,height-580/photo.jpg
+                          publishedAt:
+                            type: string
+                            format: date-time
+                            example: 2025-09-04T01:16:00Z
+                          source:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: Times of India
+                              url:
+                                type: string
+                                format: uri
+                                example: https://timesofindia.indiatimes.com
+          "400":
+            description: Missing required query
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: false
+                    message:
+                      type: string
+                      example: Query is required (e.g., "canada study visa")
+          "500":
+            description: Failed to fetch visa news
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: false
+                    message:
+                      type: string
+                      example: Failed to fetch visa news
 
+   /newsData/latest:
+      get:
+        summary: Get latest immigration news
+        description: Scrapes the latest immigration news articles from CIC News and returns them as JSON.
+        tags:
+          - newsData CIC
+        parameters:
+          - in: query
+            name: page
+            schema:
+              type: integer
+              default: 1
+              minimum: 1
+            description: Page number of news to fetch
+        responses:
+          '200':
+            description: List of latest news
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: true
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            example: "Canada launches new Express Entry draw"
+                          url:
+                            type: string
+                            example: "https://www.cicnews.com/2025/10/canada-express-entry-draw.html"
+                          summary:
+                            type: string
+                            example: "Canada invited 4,000 skilled workers in the latest Express Entry draw..."
+                          date:
+                            type: string
+                            example: "2025-10-15"
+          '500':
+            description: Error while fetching news
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: false
+                    message:
+                      type: string
+                      example: "Something went wrong !!" 
+      
+   /newsData/uscis-news:
+      get:
+        summary: Get latest USCIS news
+        description: Fetches the latest news articles from the USCIS Newsroom with full content.
+        parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 5
+            minimum: 1
+            maximum: 100
+          description: "Number of articles to fetch (default 5)"
+        tags:
+          - USCIS
+        responses:
+          '200':
+            description: A list of news articles
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: true
+                    total:
+                      type: integer
+                      example: 10
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            example: "USCIS announces updates to visa policies"
+                          url:
+                            type: string
+                            example: "https://www.uscis.gov/newsroom/uscis-announces-updates"
+                          date:
+                            type: string
+                            example: "Oct 16, 2025"
+                          fullContent:
+                            type: array
+                            items:
+                              type: string
+                              example: "Paragraph 1 of the news article"
+          '500':
+            description: Failed to fetch USCIS news
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: false
+                    message:
+                      type: string
+                      example: "Failed to fetch USCIS news"
+                    error:
+                      type: string
+                      example: "Request timed out"
