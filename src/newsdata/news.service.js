@@ -774,7 +774,7 @@ class NewsService {
         "Japan"];
 
       const countries = countryFilter
-        ? allCountries.filter(c => c.toLowerCase() === countryFilter.toLowerCase())
+        ? allCountries.filter(c => c.toLowerCase() === countryFilter.toLowerCase())  
         : allCountries;
 
       const visaKeywords = [
