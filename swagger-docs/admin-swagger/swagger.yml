@@ -27,56 +27,56 @@ components:
 paths:
 
    
-   /visadata/visa-groq:
-      get:
-        summary: Get visa information
-        description: Returns detailed visa requirements based on origin and destination countries.
-        tags:
-          - Visagroq
-        parameters:
-          - in: query
-            name: from
-            required: true
-            schema:
-              type: string
-            description: Country you're traveling from (passport country India)
-          - in: query
-            name: to
-            required: false
-            schema:
-              type: string
-            description: Country you want to travel to (Canada)
-          - in: query
-            name: purpose
-            required: false
-            schema:
-              type: string
-              enum: [tourism, study, work, digital_nomad, business, transit, medical, family_visit, conference, diplomatic, religious, volunteer, immigration, training, internship, cultural_exchange, journalism, sports, film]
-            description: Purpose of your travel (default: tourism)
-        responses:
-          200:
-            description: Visa information fetched successfully
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: boolean
-                      example: true
-                    from:
-                      type: string
-                      example: India
-                    to:
-                      type: string
-                      example: Canada
-                    visa:
-                      type: string
-                      example: "1. Visa Type: Visitor Visa...\n2. Documents Required: ..."
-          400:
-            description: Missing required query parameters
-          500:
-            description: Server error while fetching visa data
+  #  /visadata/visa-groq:
+  #     get:
+  #       summary: Get visa information
+  #       description: Returns detailed visa requirements based on origin and destination countries.
+  #       tags:
+  #         - Visagroq
+  #       parameters:
+  #         - in: query
+  #           name: from
+  #           required: true
+  #           schema:
+  #             type: string
+  #           description: Country you're traveling from (passport country India)
+  #         - in: query
+  #           name: to
+  #           required: false
+  #           schema:
+  #             type: string
+  #           description: Country you want to travel to (Canada)
+  #         - in: query
+  #           name: purpose
+  #           required: false
+  #           schema:
+  #             type: string
+  #             enum: [tourism, study, work, digital_nomad, business, transit, medical, family_visit, conference, diplomatic, religious, volunteer, immigration, training, internship, cultural_exchange, journalism, sports, film]
+  #           description: Purpose of your travel (default: tourism)
+  #       responses:
+  #         200:
+  #           description: Visa information fetched successfully
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   from:
+  #                     type: string
+  #                     example: India
+  #                   to:
+  #                     type: string
+  #                     example: Canada
+  #                   visa:
+  #                     type: string
+  #                     example: "1. Visa Type: Visitor Visa...\n2. Documents Required: ..."
+  #         400:
+  #           description: Missing required query parameters
+  #         500:
+  #           description: Server error while fetching visa data
 
 
   #  /jobbank/scrape:
@@ -138,191 +138,479 @@ paths:
 
 
 
-   /newsData/newsData:
-      get:
-        summary: Get visa news information
-        description: Returns detailed visa news based on origin and destination countries.
-        tags:
-          - newsData
-        responses:
-          200:
-            description: Visa information fetched successfully
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: boolean
-                      example: true
-                    country:
-                      type: string
-                      example: India
-          400:
-            description: Missing required query parameters
-          500:
-            description: Server error while fetching visa data
+  #  /newsData/newsData:
+  #     get:
+  #       summary: Get visa news information
+  #       description: Returns detailed visa news based on origin and destination countries.
+  #       tags:
+  #         - newsData
+  #       responses:
+  #         200:
+  #           description: Visa information fetched successfully
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   country:
+  #                     type: string
+  #                     example: India
+  #         400:
+  #           description: Missing required query parameters
+  #         500:
+  #           description: Server error while fetching visa data
  
-   /newsData/gnews:
+  #  /newsData/gnews:
+  #     get:
+  #       summary: Get visa-related news
+  #       description: |
+  #         Fetch the latest visa and immigration news articles.
+  #         - Use the `query` parameter for combined search.
+  #         - Example: `canada study visa`, `australia work visa`, `uk family visa`.
+  #       parameters:
+  #         - in: query
+  #           name: query
+  #           required: true
+  #           schema:
+  #             type: string
+  #           description: Combined country and visa type query
+  #           example: canada immigration news
+  #       responses:
+  #         "200":
+  #           description: A list of visa-related news articles
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   articles:
+  #                     type: array
+  #                     items:
+  #                       type: object
+  #                       properties:
+  #                         title:
+  #                           type: string
+  #                           example: Canada rejects 62% of student visas in 2025, the toughest stance in a decade
+  #                         description:
+  #                           type: string
+  #                           example: Canada’s student visa rejection rate has hit a decade high...
+  #                         url:
+  #                           type: string
+  #                           format: uri
+  #                           example: https://timesofindia.indiatimes.com/education/news/canada-rejects-62-of-student-visas/articleshow/123687928.cms
+  #                         image:
+  #                           type: string
+  #                           format: uri
+  #                           example: https://static.toiimg.com/thumb/msid-123688000,width-1070,height-580/photo.jpg
+  #                         publishedAt:
+  #                           type: string
+  #                           format: date-time
+  #                           example: 2025-09-04T01:16:00Z
+  #                         source:
+  #                           type: object
+  #                           properties:
+  #                             name:
+  #                               type: string
+  #                               example: Times of India
+  #                             url:
+  #                               type: string
+  #                               format: uri
+  #                               example: https://timesofindia.indiatimes.com
+  #         "400":
+  #           description: Missing required query
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: false
+  #                   message:
+  #                     type: string
+  #                     example: Query is required (e.g., "canada study visa")
+  #         "500":
+  #           description: Failed to fetch visa news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: false
+  #                   message:
+  #                     type: string
+  #                     example: Failed to fetch visa news
+
+  #  /newsData/latest:
+  #     get:
+  #       summary: Get latest immigration news
+  #       description: Scrapes the latest immigration news articles from CIC News and returns them as JSON.
+  #       tags:
+  #         - CIC canada news
+  #       parameters:
+  #         - in: query
+  #           name: page
+  #           schema:
+  #             type: integer
+  #             default: 1
+  #             minimum: 1
+  #           description: Page number of news to fetch
+  #       responses:
+  #         '200':
+  #           description: List of latest news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       type: object
+  #                       properties:
+  #                         title:
+  #                           type: string
+  #                           example: "Canada launches new Express Entry draw"
+  #                         url:
+  #                           type: string
+  #                           example: "https://www.cicnews.com/2025/10/canada-express-entry-draw.html"
+  #                         summary:
+  #                           type: string
+  #                           example: "Canada invited 4,000 skilled workers in the latest Express Entry draw..."
+  #                         date:
+  #                           type: string
+  #                           example: "2025-10-15"
+  #         '500':
+  #           description: Error while fetching news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: false
+  #                   message:
+  #                     type: string
+  #                     example: "Something went wrong !!" 
+      
+  #  /newsData/uscis-news:
+  #     get:
+  #       summary: Get latest USCIS news
+  #       description: Fetches the latest news articles from the USCIS Newsroom with full content.
+  #       parameters:
+  #       - in: query
+  #         name: limit
+  #         schema:
+  #           type: integer
+  #           default: 5
+  #           minimum: 1
+  #           maximum: 100
+  #         description: "Number of articles to fetch (default 5)"
+  #       tags:
+  #         - USCIS Us News
+  #       responses:
+  #         '200':
+  #           description: A list of news articles
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   total:
+  #                     type: integer
+  #                     example: 10
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       type: object
+  #                       properties:
+  #                         title:
+  #                           type: string
+  #                           example: "USCIS announces updates to visa policies"
+  #                         url:
+  #                           type: string
+  #                           example: "https://www.uscis.gov/newsroom/uscis-announces-updates"
+  #                         date:
+  #                           type: string
+  #                           example: "Oct 16, 2025"
+  #                         fullContent:
+  #                           type: array
+  #                           items:
+  #                             type: string
+  #                             example: "Paragraph 1 of the news article"
+  #         '500':
+  #           description: Failed to fetch USCIS news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: false
+  #                   message:
+  #                     type: string
+  #                     example: "Failed to fetch USCIS news"
+  #                   error:
+  #                     type: string
+  #                     example: "Request timed out"
+
+  #  /newsData/get-news:
+  #     get:
+  #       summary: Get latest immigration news
+  #       description: Fetches the latest news articles from the business standard with full content.
+  #       tags:
+  #         - Latest Immigration News
+  #       responses:
+  #         '200':
+  #           description: A list of news articles
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   total:
+  #                     type: integer
+  #                     example: 10
+  #         '500':
+  #           description: Failed to fetch USCIS news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: false
+  #                   message:
+  #                     type: string
+  #                     example: "Failed to fetch USCIS news"
+  #                   error:
+  #                     type: string
+  #                     example: "Request timed out"
+
+  #  /newsData/timesOfIndiaNews:
+  #     get:
+  #       tags:
+  #         - Visa & Immigration News
+  #       summary: Get latest Visa and Immigration news from Times of India
+  #       description: |
+  #         Scrapes the latest **Visa and Immigration** news articles from the [Times of India](https://timesofindia.indiatimes.com/topic/visa-and-immigration) website.
+  #         Returns full article details including title, summary, publication date, and full content.
+  #       responses:
+  #         200:
+  #           description: Successfully fetched the latest news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   total:
+  #                     type: integer
+  #                     example: 40
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       type: object
+  #                       properties:
+  #                         title:
+  #                           type: string
+  #                           example: "Canada announces new immigration rules for 2025"
+  #                         url:
+  #                           type: string
+  #                           example: "https://timesofindia.indiatimes.com/world/canada/new-immigration-rules-2025/articleshow/105017329.cms"
+  #                         summary:
+  #                           type: string
+  #                           example: "The Canadian government introduced new policies to streamline visa applications for international workers."
+  #                         date:
+  #                           type: string
+  #                           format: date-time
+  #                           example: "2025-11-03T10:00:00+05:30"
+  #                         fullContent:
+  #                           type: array
+  #                           items:
+  #                             type: string
+  #                           example:
+  #                             - "The Canadian government has announced a new set of immigration measures..."
+  #                             - "According to officials, these changes will benefit students and skilled workers."
+  #         500:
+  #           description: Failed to fetch or scrape the news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: false
+  #                   message:
+  #                     type: string
+  #                     example: "Failed to fetch news"
+   
+  #  /newsData/visaguide:
+  #     get:
+  #       tags:
+  #         - Visa & Immigration News
+  #       summary: Get latest Visa and Immigration news from VisaGuide.World
+  #       description: |
+  #         Scrapes the latest **Visa and Immigration** news articles from the [VisaGuide.World](https://visaguide.world/news/) website.
+  #         Returns full article details including title, publication date, URL, and full content.
+  #       responses:
+  #         200:
+  #           description: Successfully fetched the latest news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   total:
+  #                     type: integer
+  #                     example: 10
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       type: object
+  #                       properties:
+  #                         title:
+  #                           type: string
+  #                           example: "France Announces New Visa Policy for Skilled Migrants"
+  #                         url:
+  #                           type: string
+  #                           example: "https://visaguide.world/news/france-announces-new-visa-policy/"
+  #                         date:
+  #                           type: string
+  #                           format: date-time
+  #                           example: "2025-10-28T12:00:00+05:30"
+  #                         content:
+  #                           type: array
+  #                           items:
+  #                             type: string
+  #                           example:
+  #                             - "France has unveiled a new visa policy to attract skilled migrants."
+  #                             - "The new measures simplify the application process and reduce waiting times."
+  #         500:
+  #           description: Failed to fetch or scrape the news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: false
+  #                   message:
+  #                     type: string
+  #                     example: "Failed to fetch news"
+
+  #  /newsData/visa-news:
+  #     get:
+  #       tags:
+  #         - Visa & Immigration News
+  #       summary: Get latest Visa and Immigration news using Tavily API
+  #       description: |
+  #         Fetches only **Visa and Immigration**-related news articles globally or for a specific country using the Tavily Search API.
+  #         Filters irrelevant results automatically using keyword-based AI filtering.
+  #       parameters:
+  #         - name: country
+  #           in: query
+  #           required: false
+  #           description: Country name to filter visa and immigration news (e.g., "Canada")
+  #           schema:
+  #             type: string
+  #             example: "India"
+  #       responses:
+  #         200:
+  #           description: Successfully fetched filtered visa and immigration news
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: true
+  #                   total:
+  #                     type: integer
+  #                     example: 7
+  #                   data:
+  #                     type: array
+  #                     items:
+  #                       type: object
+  #                       properties:
+  #                         title:
+  #                           type: string
+  #                           example: "Canada extends visa-free entry to 45 countries"
+  #                         url:
+  #                           type: string
+  #                           example: "https://www.reuters.com/world/asia-pacific/canada-visa-free-extension/"
+  #                         snippet:
+  #                           type: string
+  #                           example: "Canada has expanded its visa-free entry policy to more European nations..."
+  #                         full_content:
+  #                           type: string
+  #                           example: "The new visa policy will simplify travel for European nationals..."
+  #                         published_date:
+  #                           type: string
+  #                           format: date-time
+  #                           example: "2025-11-03T08:45:00Z"
+  #         500:
+  #           description: Tavily API request failed or no relevant visa/immigration news found
+  #           content:
+  #             application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   status:
+  #                     type: boolean
+  #                     example: false
+  #                   message:
+  #                     type: string
+  #                     example: "Failed to fetch visa and immigration news"
+
+
+   /newsData/visaSerpi:
       get:
-        summary: Get visa-related news
+        tags:
+          - SerpApi
+        summary: Get latest Visa and Immigration news using SerpApi
         description: |
-          Fetch the latest visa and immigration news articles.
-          - Use the `query` parameter for combined search.
-          - Example: `canada study visa`, `australia work visa`, `uk family visa`.
+          Fetches only **Visa and Immigration**-related news articles globally or for a specific country using the SerpApi News API.
+          Filters irrelevant results automatically using keyword-based AI filtering.
         parameters:
-          - in: query
-            name: query
-            required: true
+          - name: country
+            in: query
+            required: false
+            description: Country name to filter visa and immigration news (e.g., "Canada")
             schema:
               type: string
-            description: Combined country and visa type query
-            example: canada immigration news
+              example: "India"
         responses:
-          "200":
-            description: A list of visa-related news articles
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: boolean
-                      example: true
-                    articles:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          title:
-                            type: string
-                            example: Canada rejects 62% of student visas in 2025, the toughest stance in a decade
-                          description:
-                            type: string
-                            example: Canada’s student visa rejection rate has hit a decade high...
-                          url:
-                            type: string
-                            format: uri
-                            example: https://timesofindia.indiatimes.com/education/news/canada-rejects-62-of-student-visas/articleshow/123687928.cms
-                          image:
-                            type: string
-                            format: uri
-                            example: https://static.toiimg.com/thumb/msid-123688000,width-1070,height-580/photo.jpg
-                          publishedAt:
-                            type: string
-                            format: date-time
-                            example: 2025-09-04T01:16:00Z
-                          source:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: Times of India
-                              url:
-                                type: string
-                                format: uri
-                                example: https://timesofindia.indiatimes.com
-          "400":
-            description: Missing required query
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: boolean
-                      example: false
-                    message:
-                      type: string
-                      example: Query is required (e.g., "canada study visa")
-          "500":
-            description: Failed to fetch visa news
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: boolean
-                      example: false
-                    message:
-                      type: string
-                      example: Failed to fetch visa news
-
-   /newsData/latest:
-      get:
-        summary: Get latest immigration news
-        description: Scrapes the latest immigration news articles from CIC News and returns them as JSON.
-        tags:
-          - newsData CIC
-        parameters:
-          - in: query
-            name: page
-            schema:
-              type: integer
-              default: 1
-              minimum: 1
-            description: Page number of news to fetch
-        responses:
-          '200':
-            description: List of latest news
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: boolean
-                      example: true
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          title:
-                            type: string
-                            example: "Canada launches new Express Entry draw"
-                          url:
-                            type: string
-                            example: "https://www.cicnews.com/2025/10/canada-express-entry-draw.html"
-                          summary:
-                            type: string
-                            example: "Canada invited 4,000 skilled workers in the latest Express Entry draw..."
-                          date:
-                            type: string
-                            example: "2025-10-15"
-          '500':
-            description: Error while fetching news
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: boolean
-                      example: false
-                    message:
-                      type: string
-                      example: "Something went wrong !!" 
-      
-   /newsData/uscis-news:
-      get:
-        summary: Get latest USCIS news
-        description: Fetches the latest news articles from the USCIS Newsroom with full content.
-        parameters:
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            default: 5
-            minimum: 1
-            maximum: 100
-          description: "Number of articles to fetch (default 5)"
-        tags:
-          - USCIS
-        responses:
-          '200':
-            description: A list of news articles
+          200:
+            description: Successfully fetched filtered visa and immigration news
             content:
               application/json:
                 schema:
@@ -333,7 +621,7 @@ paths:
                       example: true
                     total:
                       type: integer
-                      example: 10
+                      example: 8
                     data:
                       type: array
                       items:
@@ -341,20 +629,25 @@ paths:
                         properties:
                           title:
                             type: string
-                            example: "USCIS announces updates to visa policies"
+                            example: "US expands H-1B visa quota for 2025"
                           url:
                             type: string
-                            example: "https://www.uscis.gov/newsroom/uscis-announces-updates"
-                          date:
+                            example: "https://www.uscis.gov/news/h1b-update"
+                          snippet:
                             type: string
-                            example: "Oct 16, 2025"
-                          fullContent:
-                            type: array
-                            items:
-                              type: string
-                              example: "Paragraph 1 of the news article"
-          '500':
-            description: Failed to fetch USCIS news
+                            example: "The US government announced an expansion in H-1B visa quota for tech workers..."
+                          full_content:
+                            type: string
+                            example: "The H-1B visa program allows US employers to hire foreign workers in specialty occupations. For 2025, the quota has been increased to..."
+                          published_date:
+                            type: string
+                            format: date-time
+                            example: "2025-11-05T10:30:00Z"
+                          source:
+                            type: string
+                            example: "USCIS"
+          500:
+            description: SerpApi request failed or no relevant visa/immigration news found
             content:
               application/json:
                 schema:
@@ -365,7 +658,5 @@ paths:
                       example: false
                     message:
                       type: string
-                      example: "Failed to fetch USCIS news"
-                    error:
-                      type: string
-                      example: "Request timed out"
+                      example: "Failed to fetch visa and immigration news"
+    
