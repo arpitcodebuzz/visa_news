@@ -783,7 +783,6 @@ class NewsService {
 
       let allNews = [];
 
-      // fetch news for each country
       for (const country of countries) {
         try {
           const query = `visa and immigration news ${country}`;
