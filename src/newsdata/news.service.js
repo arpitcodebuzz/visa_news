@@ -764,7 +764,7 @@ class NewsService {
   }
 
 
-  async getSerpiNews(countryFilter) {
+  async getSerpiNews(countryFilter, page = 1, pageSize = 10) {
     try {
       const allCountries = [
         "Canada", "US", "Australia", "Germany", "New Zealand", "India", "China", "UK",
@@ -783,6 +783,7 @@ class NewsService {
 
       let allNews = [];
 
+      // fetch news for each country
       for (const country of countries) {
         try {
           const query = `visa and immigration news ${country}`;
@@ -793,7 +794,7 @@ class NewsService {
               q: query,
               hl: "en",
               gl: "us",
-              num: 20,
+              num: 30, // fetch more to increase coverage
             },
           });
 
@@ -812,15 +813,12 @@ class NewsService {
               let fullContent = "";
               let metaImage = "";
 
-              // 🖼️ Directly from SerpAPI fields
               const thumbnail = article.thumbnail || null;
               const image = article.image || null;
 
               try {
-                // Fetch the article HTML for full content and meta image
                 const htmlRes = await axios.get(article.link, { timeout: 7000 });
                 const $ = cheerio.load(htmlRes.data);
-
                 fullContent = $("p")
                   .map((i, el) => $(el).text())
                   .get()
@@ -828,16 +826,15 @@ class NewsService {
                   .replace(/\s+/g, " ")
                   .trim();
 
-                // 🧠 Try to get <meta property="og:image"> or <meta name="twitter:image">
                 metaImage =
                   $('meta[property="og:image"]').attr("content") ||
                   $('meta[name="twitter:image"]').attr("content") ||
                   null;
               } catch (e) {
-                fullContent = "";
+                fullContent = article.snippet || "";
               }
 
-              if (fullContent && fullContent.length > 50) {
+              if (fullContent && fullContent.length > 10) {
                 return {
                   country,
                   title: article.title || "No Title",
@@ -846,7 +843,7 @@ class NewsService {
                   full_content: fullContent,
                   published_date: article.date || null,
                   source: article.source || "",
-                  thumbnail, // 🖼️ SerpAPI thumbnail
+                  thumbnail,
                   _timestamp: article.date ? new Date(article.date).getTime() : 0,
                 };
               } else {
@@ -862,18 +859,27 @@ class NewsService {
         }
       }
 
+      // sort by date
       allNews.sort((a, b) => b._timestamp - a._timestamp);
+
+      // pagination
+      const startIndex = (page - 1) * pageSize;
+      const paginatedData = allNews.slice(startIndex, startIndex + pageSize);
 
       return {
         status: true,
         total: allNews.length,
-        data: allNews.map(({ _timestamp, ...rest }) => rest),
+        page,
+        pageSize,
+        totalPages: Math.ceil(allNews.length / pageSize),
+        data: paginatedData.map(({ _timestamp, ...rest }) => rest),
       };
     } catch (error) {
       console.error("Service Error:", error.message);
       return { status: false, message: "Failed to fetch visa news" };
     }
   }
+
 
 }
 
