@@ -526,70 +526,70 @@ paths:
   #                     type: string
   #                     example: "Failed to fetch news"
 
-  #  /newsData/visa-news:
-  #     get:
-  #       tags:
-  #         - Visa & Immigration News
-  #       summary: Get latest Visa and Immigration news using Tavily API
-  #       description: |
-  #         Fetches only **Visa and Immigration**-related news articles globally or for a specific country using the Tavily Search API.
-  #         Filters irrelevant results automatically using keyword-based AI filtering.
-  #       parameters:
-  #         - name: country
-  #           in: query
-  #           required: false
-  #           description: Country name to filter visa and immigration news (e.g., "Canada")
-  #           schema:
-  #             type: string
-  #             example: "India"
-  #       responses:
-  #         200:
-  #           description: Successfully fetched filtered visa and immigration news
-  #           content:
-  #             application/json:
-  #               schema:
-  #                 type: object
-  #                 properties:
-  #                   status:
-  #                     type: boolean
-  #                     example: true
-  #                   total:
-  #                     type: integer
-  #                     example: 7
-  #                   data:
-  #                     type: array
-  #                     items:
-  #                       type: object
-  #                       properties:
-  #                         title:
-  #                           type: string
-  #                           example: "Canada extends visa-free entry to 45 countries"
-  #                         url:
-  #                           type: string
-  #                           example: "https://www.reuters.com/world/asia-pacific/canada-visa-free-extension/"
-  #                         snippet:
-  #                           type: string
-  #                           example: "Canada has expanded its visa-free entry policy to more European nations..."
-  #                         full_content:
-  #                           type: string
-  #                           example: "The new visa policy will simplify travel for European nationals..."
-  #                         published_date:
-  #                           type: string
-  #                           format: date-time
-  #                           example: "2025-11-03T08:45:00Z"
-  #         500:
-  #           description: Tavily API request failed or no relevant visa/immigration news found
-  #           content:
-  #             application/json:
-  #               schema:
-  #                 type: object
-  #                 properties:
-  #                   status:
-  #                     type: boolean
-  #                     example: false
-  #                   message:
-  #                     type: string
-  #                     example: "Failed to fetch visa and immigration news"
+   /newsData/visa-news:
+      get:
+        tags:
+          - Visa & Immigration News
+        summary: Get latest Visa and Immigration news using Tavily API
+        description: |
+          Fetches only **Visa and Immigration**-related news articles globally or for a specific country using the Tavily Search API.
+          Filters irrelevant results automatically using keyword-based AI filtering.
+        parameters:
+          - name: country
+            in: query
+            required: false
+            description: Country name to filter visa and immigration news (e.g., "Canada")
+            schema:
+              type: string
+              example: "India"
+        responses:
+          200:
+            description: Successfully fetched filtered visa and immigration news
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: true
+                    total:
+                      type: integer
+                      example: 7
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            example: "Canada extends visa-free entry to 45 countries"
+                          url:
+                            type: string
+                            example: "https://www.reuters.com/world/asia-pacific/canada-visa-free-extension/"
+                          snippet:
+                            type: string
+                            example: "Canada has expanded its visa-free entry policy to more European nations..."
+                          full_content:
+                            type: string
+                            example: "The new visa policy will simplify travel for European nationals..."
+                          published_date:
+                            type: string
+                            format: date-time
+                            example: "2025-11-03T08:45:00Z"
+          500:
+            description: Tavily API request failed or no relevant visa/immigration news found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: false
+                    message:
+                      type: string
+                      example: "Failed to fetch visa and immigration news"
 
 
    /newsData/visaSerpi:

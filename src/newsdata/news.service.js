@@ -694,87 +694,85 @@ class NewsService {
   //   }
   // }
 
+  async fetchVisaNewsWithFullContent(country) {
+    const query = country
+      ? `latest visa and immigration news in ${country}`
+      : `latest visa and immigration news around the world`;
 
-  // async fetchVisaNewsWithFullContent(country) {
-  //   const query = country
-  //     ? `latest visa and immigration news in ${country}`
-  //     : `latest visa and immigration news around the world`;
+    try {
+      const response = await axios.post("https://api.tavily.com/search", {
+        api_key: process.env.TAVILY_API_KEY,
+        query,
+        max_results: 20,
+        include_answer: true,
+        include_raw_content: true,
+        include_images: true, // ✅ fetch images
+      });
 
-  //   try {
-  //     const response = await axios.post("https://api.tavily.com/search", {
-  //       api_key: process.env.TAVILY_API_KEY,
-  //       query,
-  //       max_results: 20, // fetch extra to filter
-  //       include_answer: true,
-  //       include_raw_content: true,
-  //       include_images: false,
-  //     });
+      const results = response.data.results || [];
 
-  //     const results = response.data.results || [];
+      // Visa/immigration keywords
+      const visaKeywords = [
+        "visa",
+        "immigration",
+        "migrant",
+        "migration",
+        "citizenship",
+        "h-1b",
+        "student visa",
+        "residency",
+        "green card",
+        "passport",
+        "travel ban",
+        "work permit",
+        "asylum",
+        "refugee",
+      ];
 
-  //     // Visa/immigration keywords
-  //     const visaKeywords = [
-  //       "visa",
-  //       "immigration",
-  //       "migrant",
-  //       "migration",
-  //       "citizenship",
-  //       "h-1b",
-  //       "student visa",
-  //       "residency",
-  //       "green card",
-  //       "passport",
-  //       "travel ban",
-  //       "work permit",
-  //       "asylum",
-  //       "refugee",
-  //     ];
+      const cleanText = (raw) => {
+        if (!raw) return "Content not available.";
+        const text = raw.replace(/<[^>]*>/g, "");
+        return text.replace(/\s+/g, " ").trim();
+      };
 
-  //     // Helper to clean raw HTML/text
-  //     const cleanText = (raw) => {
-  //       if (!raw) return "Content not available.";
-  //       const text = raw.replace(/<[^>]*>/g, " "); // Remove HTML tags
-  //       return text.replace(/\s+/g, " ").trim();   // Collapse spaces/newlines
-  //     };
+      const filteredNews = results.filter((item) => {
+        const text = `${item.title || ""} ${item.snippet || ""}`.toLowerCase();
+        return visaKeywords.some((kw) => text.includes(kw));
+      });
 
-  //     // Filter only relevant news
-  //     const filteredNews = results.filter((item) => {
-  //       const text = `${item.title || ""} ${item.snippet || ""}`.toLowerCase();
-  //       return visaKeywords.some((kw) => text.includes(kw));
-  //     });
+      const newsData = filteredNews.map((article) => ({
+        title: article.title ? article.title.trim() : "No Title",
+        url: article.url,
+        snippet: article.snippet ? article.snippet.trim() : "",
+        full_content: cleanText(article.raw_content),
+        published_date: article.published_date || null,
+        images: article.images || [],
+      }));
 
-  //     // Map results with cleaned content
-  //     const newsData = filteredNews.map((article) => ({
-  //       title: article.title ? article.title.trim() : "No Title",
-  //       url: article.url,
-  //       snippet: article.snippet ? article.snippet.trim() : "",
-  //       full_content: cleanText(article.raw_content),
-  //       published_date: article.published_date || null,
-  //     }));
+      return {
+        status: true,
+        total: newsData.length,
+        data: newsData,
+      };
+    } catch (error) {
+      console.error("Tavily API Error:", error.message);
+      return {
+        status: false,
+        message: "Failed to fetch visa and immigration news",
+      };
+    }
+  }
 
-  //     return {
-  //       status: true,
-  //       total: newsData.length,
-  //       data: newsData,
-  //     };
-  //   } catch (error) {
-  //     console.error("Tavily API Error:", error.message);
-  //     return {
-  //       status: false,
-  //       message: "Failed to fetch visa and immigration news",
-  //     };
-  //   }
-  // }
 
   async getSerpiNews(countryFilter) {
     try {
       const allCountries = [
-        "Canada", "US", "Australia", "Germany", "New Zealand", "India", "China", "UK",
-        "Afghanistan", "Armenia", "Bangladesh", "Bhutan", "China", "India", "Indonesia", "Iran", "Iraq", "Israel",
-        "Japan"];
+        "Canada", "US", "Australia", "Germany", "New Zealand", "India", "China", "UK",
+        "Afghanistan", "Armenia", "Bangladesh", "Bhutan", "Indonesia", "Iran", "Iraq", "Israel", "Japan"
+      ];
 
       const countries = countryFilter
-        ? allCountries.filter(c => c.toLowerCase() === countryFilter.toLowerCase())  
+        ? allCountries.filter(c => c.toLowerCase() === countryFilter.toLowerCase())
         : allCountries;
 
       const visaKeywords = [
@@ -802,7 +800,9 @@ class NewsService {
           const articles = response.data.news_results || [];
 
           const filtered = articles.filter(a =>
-            visaKeywords.some(kw => (a.title + " " + (a.snippet || "")).toLowerCase().includes(kw))
+            visaKeywords.some(kw =>
+              (a.title + " " + (a.snippet || "")).toLowerCase().includes(kw)
+            )
           );
 
           const limit = countryFilter ? filtered.length : 5;
@@ -810,10 +810,29 @@ class NewsService {
           const newsData = await Promise.all(
             filtered.slice(0, limit).map(async article => {
               let fullContent = "";
+              let metaImage = "";
+
+              // 🖼️ Directly from SerpAPI fields
+              const thumbnail = article.thumbnail || null;
+              const image = article.image || null;
+
               try {
-                const htmlRes = await axios.get(article.link, { timeout: 5000 });
+                // Fetch the article HTML for full content and meta image
+                const htmlRes = await axios.get(article.link, { timeout: 7000 });
                 const $ = cheerio.load(htmlRes.data);
-                fullContent = $("p").map((i, el) => $(el).text()).get().join(" ").replace(/\s+/g, " ").trim();
+
+                fullContent = $("p")
+                  .map((i, el) => $(el).text())
+                  .get()
+                  .join(" ")
+                  .replace(/\s+/g, " ")
+                  .trim();
+
+                // 🧠 Try to get <meta property="og:image"> or <meta name="twitter:image">
+                metaImage =
+                  $('meta[property="og:image"]').attr("content") ||
+                  $('meta[name="twitter:image"]').attr("content") ||
+                  null;
               } catch (e) {
                 fullContent = "";
               }
@@ -827,6 +846,7 @@ class NewsService {
                   full_content: fullContent,
                   published_date: article.date || null,
                   source: article.source || "",
+                  thumbnail, // 🖼️ SerpAPI thumbnail
                   _timestamp: article.date ? new Date(article.date).getTime() : 0,
                 };
               } else {
@@ -849,15 +869,11 @@ class NewsService {
         total: allNews.length,
         data: allNews.map(({ _timestamp, ...rest }) => rest),
       };
-
     } catch (error) {
       console.error("Service Error:", error.message);
       return { status: false, message: "Failed to fetch visa news" };
     }
   }
-
-
-
 
 }
 
