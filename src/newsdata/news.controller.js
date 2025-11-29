@@ -101,11 +101,11 @@ class NewsController {
 
   async getSerpiNews(req, res) {
     const country = req.query.country || null;
-    const page = req.query.page ? parseInt(req.query.page) : 1;
-    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+    // const page = req.query.page ? parseInt(req.query.page) : 1;
+    // const limit = req.query.limit ? parseInt(req.query.limit) : 10;
 
     try {
-      const result = await newsService.getSerpiNews(country, page, limit);
+      const result = await newsService.getSerpiNews(country);
       res.status(result.status ? 200 : 500).json(result);
     } catch (error) {
       res.status(500).json({ status: false, message: "Server Error", error: error.message });
